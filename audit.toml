@@ -1,0 +1,31 @@
+# Configuration for cargo-audit
+#
+# This file documents security advisories that we've chosen to ignore
+# and explains why they don't affect our application.
+#
+# Note: cargo-audit doesn't automatically read this file. Use the --ignore flag:
+#   cargo audit --ignore RUSTSEC-2023-0071
+
+[advisories]
+# RUSTSEC-2023-0071: RSA Marvin Attack vulnerability
+# 
+# This vulnerability affects the RSA crate used by sqlx-mysql for MySQL authentication.
+# However, our application:
+# 1. Only uses PostgreSQL (not MySQL) - see Cargo.toml sqlx features
+# 2. The vulnerability is specific to MySQL's RSA-based authentication protocol
+# 3. SQLx macros require all database drivers at compile time for SQL parsing,
+#    but we only use the postgres driver at runtime
+# 4. There is no fixed upgrade available for this transitive dependency
+# 5. The rsa crate is ONLY used by sqlx-mysql, which we don't use
+#
+# Risk Assessment: NONE
+# - We don't use MySQL or its authentication protocol
+# - The vulnerable code path is never executed in our application
+# - This is a compile-time dependency only (for macros), not runtime
+#
+# Verified on: 2026-02-24
+# Last reviewed: 2026-02-24
+#
+ignore = [
+    "RUSTSEC-2023-0071"  # RSA Marvin Attack (MySQL only, we use PostgreSQL)
+]

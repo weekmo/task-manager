@@ -1,7 +1,7 @@
 // Unit tests for error handling
-use task_manager::errors::AppError;
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
+use task_manager::errors::AppError;
 
 #[test]
 fn test_app_error_display() {

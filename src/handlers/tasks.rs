@@ -16,10 +16,12 @@ pub async fn get_tasks(
     State(pool): State<PgPool>,
     AuthUser(user_id): AuthUser,
 ) -> Result<Json<Vec<Task>>, AppError> {
-    let tasks = sqlx::query_as::<_, Task>("SELECT * FROM tasks WHERE user_id = $1 ORDER BY created_at DESC")
-        .bind(user_id)
-        .fetch_all(&pool)
-        .await?;
+    let tasks = sqlx::query_as::<_, Task>(
+        "SELECT * FROM tasks WHERE user_id = $1 ORDER BY created_at DESC",
+    )
+    .bind(user_id)
+    .fetch_all(&pool)
+    .await?;
 
     Ok(Json(tasks))
 }
