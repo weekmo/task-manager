@@ -1,0 +1,136 @@
+### Variables
+@baseUrl = http://localhost:3000
+@token = your-jwt-token-here
+
+### Health Check (optional - add if you want to test server is running)
+GET {{baseUrl}}
+
+### Register a new user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "securepassword123"
+}
+
+### Register another user
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "alicepassword456"
+}
+
+### Login
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "securepassword123"
+}
+
+### Login as Alice
+# @name loginAlice
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "alice@example.com",
+  "password": "alicepassword456"
+}
+
+### Get all tasks (requires authentication)
+GET {{baseUrl}}/tasks
+Authorization: Bearer {{token}}
+
+### Create a new task
+# @name createTask
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Complete project documentation",
+  "description": "Write comprehensive API documentation for the task manager"
+}
+
+### Create another task
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Fix authentication bug",
+  "description": "Investigate and fix the JWT validation issue"
+}
+
+### Create a task without description
+POST {{baseUrl}}/tasks
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Quick task without details"
+}
+
+### Update a task (replace with actual task ID)
+PUT {{baseUrl}}/tasks/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Updated task title",
+  "description": "Updated description",
+  "done": true
+}
+
+### Update task - mark as done only
+PUT {{baseUrl}}/tasks/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "done": true
+}
+
+### Update task - change title only
+PUT {{baseUrl}}/tasks/00000000-0000-0000-0000-000000000000
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "New title for the task"
+}
+
+### Delete a task (replace with actual task ID)
+DELETE {{baseUrl}}/tasks/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{token}}
+
+### Test unauthorized access (no token)
+GET {{baseUrl}}/tasks
+
+### Test unauthorized access (invalid token)
+GET {{baseUrl}}/tasks
+Authorization: Bearer invalid-token-12345
+
+### Test with wrong credentials
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "wrongpassword"
+}
+
+### Test duplicate registration
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "anotherpassword"
+}

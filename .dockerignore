@@ -1,0 +1,36 @@
+# Target directory
+target/
+
+# Database files
+*.db
+*.sqlite
+
+# Environment files
+.env
+.env.local
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Documentation
+README.md
+*.md
+
+# Docker files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# HTTP test files
+*.http
+
+# Logs
+*.log
