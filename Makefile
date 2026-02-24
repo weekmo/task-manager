@@ -51,7 +51,7 @@ test: ## Run all tests locally (requires DB for integration tests)
 	@psql "postgres://postgres:password@localhost:5432/task_manager" -c "SELECT 1" > /dev/null 2>&1 || \
 		echo "⚠️  Warning: Cannot connect to database. Integration tests may fail. Run 'make dev' first."
 	@echo ""
-	JWT_SECRET=test_secret_key DATABASE_URL=postgres://postgres:password@localhost:5432/task_manager cargo test --quiet
+	JWT_SECRET=test_secret_key DATABASE_URL=postgres://postgres:password@localhost:5432/task_manager cargo test --quiet -- --test-threads=1
 	@echo ""
 	@echo "==================================="
 	@echo "✅ All tests passed!"
@@ -64,10 +64,10 @@ test-unit: ## Run only unit tests (no DB required)
 test-integration: ## Run only integration tests (requires DB)
 	@echo "Running integration tests (requires database)..."
 	@echo "Make sure database is running: make dev"
-	JWT_SECRET=test_secret_key DATABASE_URL=postgres://postgres:password@localhost:5432/task_manager cargo test --test integration_tests
+	JWT_SECRET=test_secret_key DATABASE_URL=postgres://postgres:password@localhost:5432/task_manager cargo test --test integration_tests -- --test-threads=1
 
 test-all: ## Run all tests with verbose output
-	JWT_SECRET=test_secret_key DATABASE_URL=postgres://postgres:password@localhost:5432/task_manager cargo test
+	JWT_SECRET=test_secret_key DATABASE_URL=postgres://postgres:password@localhost:5432/task_manager cargo test -- --test-threads=1
 
 test-docker: ## Run tests in Docker
 	$(DOCKER) build --target tester -t task-manager-test .

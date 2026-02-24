@@ -74,7 +74,7 @@ jobs:
       run: cargo test --lib
 
     - name: Run integration tests
-      run: cargo test --test integration_tests
+      run: cargo test --test integration_tests -- --test-threads=1
 
     - name: Build release
       run: cargo build --release

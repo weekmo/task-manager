@@ -79,15 +79,19 @@ make dev
 # Run migrations
 make migration-run-local
 
-# Run integration tests
-cargo test --test integration_tests
+# Run integration tests (must run serially to avoid database conflicts)
+cargo test --test integration_tests -- --test-threads=1
 ```
 
-Or:
+Or use the Makefile (which automatically runs serially):
 
 ```bash
 make test-integration
 ```
+
+**Note:** Integration tests must run serially because they share a single database
+and each test truncates tables in `setup_test_db()`. The Makefile and CI pipeline
+automatically add `--test-threads=1` to prevent race conditions.
 
 #### 3. All Tests
 

@@ -1,4 +1,12 @@
 // Integration tests for the task manager API
+//
+// IMPORTANT: These tests must run serially (--test-threads=1) because they share
+// a single database and each test calls setup_test_db() which truncates tables.
+// Running tests in parallel would cause race conditions and test failures.
+//
+// To run these tests locally:
+//   cargo test --test integration_tests -- --test-threads=1
+//
 use axum::{
     body::Body,
     http::{header, Request, StatusCode},
