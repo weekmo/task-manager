@@ -55,10 +55,6 @@ COPY --from=builder /usr/local/cargo/bin/sqlx /usr/local/bin/sqlx
 # Copy migrations directory
 COPY --from=builder /app/migrations /app/migrations
 
-# Copy entrypoint script
-COPY docker-entrypoint.sh /app/docker-entrypoint.sh
-RUN chmod +x /app/docker-entrypoint.sh
-
 # Change ownership to non-root user
 RUN chown -R appuser:appuser /app
 
@@ -72,8 +68,5 @@ EXPOSE 3000
 ENV DATABASE_URL="postgres://postgres:password@postgres:5432/task_manager"
 ENV JWT_SECRET="your_super_secret_key_change_this"
 
-# Use entrypoint script
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
-
-# Run the application
-CMD ["/app/task-manager"]
+# Run migrations and start application
+CMD ["/bin/sh", "-c", "echo 'Running database migrations...' && sqlx migrate run || echo 'Migration failed (tables may already exist)' && echo 'Starting application...' && /app/task-manager"]

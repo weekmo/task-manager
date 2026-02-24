@@ -143,18 +143,67 @@ Authorization: Bearer <your-jwt-token>
 
 ## Testing
 
-Use the provided `api-tests.http` file with the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension for VS Code.
+The project includes comprehensive unit and integration tests.
+
+### Quick Start
+
+```bash
+# Start database for integration tests
+make dev
+
+# Run all tests
+make test
+
+# Run only unit tests (no DB required)
+make test-unit
+
+# Run only integration tests (requires DB)
+make test-integration
+
+# Run tests in Docker
+make test-docker
+```
+
+### Test Coverage
+
+- ✅ **15 Unit Tests** - Testing models, errors, JWT, and serialization
+- ✅ **11 Integration Tests** - Testing full API workflows
+- ✅ **Total: 26 automated tests**
+
+**Test scenarios covered:**
+- User registration and authentication
+- Task CRUD operations
+- Authorization and user isolation
+- Error handling and edge cases
+- JWT token creation and validation
+
+### Test Files
+
+- `tests/integration_tests.rs` - Full API integration tests
+- `tests/error_tests.rs` - Error handling unit tests
+- `tests/auth_tests.rs` - JWT authentication unit tests
+- `tests/user_model_tests.rs` - User model unit tests
+- `tests/task_model_tests.rs` - Task model unit tests
+- `api-tests.http` - Manual API tests for REST Client
+
+See [TESTING.md](TESTING.md) for detailed testing documentation.
 
 ### Running Tests
 
 ```bash
-# Run tests locally
+# All tests
 cargo test
 
-# Run tests in Docker
-make test
+# Unit tests only
+cargo test --lib
 
-# Run tests with coverage
+# Integration tests only
+cargo test --test integration_tests
+
+# Run tests in Docker
+make test-docker
+
+# Run with output
 cargo test -- --nocapture
 ```
 
@@ -205,12 +254,11 @@ task-manager/
 │       ├── user.rs          # User model and DTOs
 │       └── task.rs          # Task model and DTOs
 ├── migrations/              # Database migrations
-├── Dockerfile               # Multi-stage Docker build
+├── Dockerfile               # Multi-stage Docker build (includes migration logic)
 ├── docker-compose.yml       # Docker Compose configuration
-├── docker-entrypoint.sh     # Container entrypoint script
 ├── api-tests.http           # HTTP API tests
 ├── Cargo.toml               # Rust dependencies
-└── Makefile                 # Build automation
+└── Makefile                 # Build automation with integrated test runner
 ```
 
 ## Database Schema

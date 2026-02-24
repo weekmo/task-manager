@@ -42,11 +42,38 @@ logs-app: ## Show logs for app service only
 logs-db: ## Show logs for postgres service only
 	$(DOCKER_COMPOSE) logs -f postgres
 
-test: ## Run tests in Docker
+test: ## Run all tests locally (requires DB for integration tests)
+	@echo "==================================="
+	@echo "Running Task Manager Tests"
+	@echo "==================================="
+	@echo ""
+	@echo "Checking database connection..."
+	@psql "postgres://postgres:password@localhost:5432/task_manager" -c "SELECT 1" > /dev/null 2>&1 || \
+		echo "⚠️  Warning: Cannot connect to database. Integration tests may fail. Run 'make dev' first."
+	@echo ""
+	JWT_SECRET=test_secret_key DATABASE_URL=postgres://postgres:password@localhost:5432/task_manager cargo test --quiet
+	@echo ""
+	@echo "==================================="
+	@echo "✅ All tests passed!"
+	@echo "==================================="
+
+test-unit: ## Run only unit tests (no DB required)
+	@echo "Running unit tests (no database required)..."
+	JWT_SECRET=test_secret_key cargo test --test error_tests --test auth_tests --test user_model_tests --test task_model_tests
+
+test-integration: ## Run only integration tests (requires DB)
+	@echo "Running integration tests (requires database)..."
+	@echo "Make sure database is running: make dev"
+	JWT_SECRET=test_secret_key DATABASE_URL=postgres://postgres:password@localhost:5432/task_manager cargo test --test integration_tests
+
+test-all: ## Run all tests with verbose output
+	JWT_SECRET=test_secret_key DATABASE_URL=postgres://postgres:password@localhost:5432/task_manager cargo test
+
+test-docker: ## Run tests in Docker
 	$(DOCKER) build --target tester -t task-manager-test .
 
-test-local: ## Run tests locally
-	cargo test
+test-watch: ## Run tests in watch mode
+	cargo watch -x test
 
 dev: ## Start services for local development (postgres only)
 	$(DOCKER_COMPOSE) up -d postgres
