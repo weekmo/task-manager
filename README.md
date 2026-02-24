@@ -21,6 +21,25 @@ A RESTful API for task management built with Rust, Axum, PostgreSQL, and JWT aut
 - **ORM**: SQLx
 - **Async Runtime**: Tokio
 
+## Installation
+
+### Pre-built Binaries (Recommended)
+
+Download pre-built binaries for Linux or Windows from the [Releases page](../../releases).
+
+**Linux:**
+```bash
+wget https://github.com/USERNAME/task-manager/releases/latest/download/task-manager-linux-x86_64.tar.gz
+tar xzf task-manager-linux-x86_64.tar.gz
+chmod +x task-manager
+./task-manager
+```
+
+**Windows:**
+Download `task-manager-windows-x86_64.zip`, extract, and run `task-manager.exe`
+
+See [RELEASE.md](RELEASE.md) for detailed installation instructions.
+
 ## Quick Start
 
 ### Using Docker Compose (Recommended)
@@ -360,3 +379,35 @@ MIT
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+## Releases
+
+Releases are automatically built and published when a version tag is pushed:
+
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+This triggers the [Release workflow](/.github/workflows/release.yml) which builds binaries for:
+- Linux x86_64 (glibc and musl)
+- Windows x86_64
+
+See [RELEASE.md](RELEASE.md) for the complete release process.
+
+## CI/CD
+
+The project uses GitHub Actions for continuous integration:
+
+- **CI Pipeline** ([.github/workflows/ci.yml](/.github/workflows/ci.yml))
+  - Tests (unit + integration)
+  - Code formatting (rustfmt)
+  - Linting (clippy)
+  - Security audit (cargo-audit)
+  - Docker build verification
+
+- **Release Pipeline** ([.github/workflows/release.yml](/.github/workflows/release.yml))
+  - Multi-platform binary builds
+  - Automated GitHub releases
+  - Platform-specific packaging
+
