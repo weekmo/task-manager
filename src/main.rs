@@ -10,7 +10,6 @@ use axum::{
 };
 use dotenvy::dotenv;
 use tower_http::trace::TraceLayer;
-use tracing_subscriber;
 
 #[tokio::main]
 async fn main() {
